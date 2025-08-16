@@ -15,7 +15,6 @@ export default class Register {
       let name = inputName.value.trim();
       localStorage.setItem('username', name);
       location.hash = '/';
-      console.log(localStorage)
     })
     
 

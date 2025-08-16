@@ -182,3 +182,40 @@ code {
 .register-container h2 {
   margin-bottom: 0;
 }
+
+
+/* home */
+
+.home__container {
+  display: flex;
+  
+  gap: 25px;
+}
+.cart-character__container {
+    width: 250px;
+    height: 300px;
+    padding: 25px;
+}
+.cart-character__img {
+  width: 200px;
+  height: 250px;
+}
+.info-character__container {
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+  padding: 15px;
+  margin-bottom: 42px;
+}
+.info-character__container p{
+  color: var(--muted);
+  margin: 10px;
+}
+.home__content-conateiner {
+  display: flex;
+  flex-direction: column;
+
+}
+.name {
+  align-self: center;
+}
