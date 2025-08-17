@@ -9,14 +9,19 @@ export default class Register {
     `;
     const inputName = div.querySelector('#username');
     const regBtn = div.querySelector('#regBtn');
+    const user = {
+      name: '',
+      activeAvatar: {},
+
+    }
 
     regBtn.addEventListener('click', () => {
       if(inputName.value === '') return false;
       let name = inputName.value.trim();
-      localStorage.setItem('username', name);
+      user.name = name;
+      localStorage.setItem('User', JSON.stringify(user));
       location.hash = '/';
-    })
-    
+    });
 
     return div;
   }

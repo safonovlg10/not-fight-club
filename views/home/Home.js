@@ -1,4 +1,5 @@
 export default class Home {
+ 
   render() {
     const div = document.createElement("div");
     div.classList.add("home__container");
@@ -15,9 +16,16 @@ export default class Home {
         <button type="button" class="btn btnStart">Начать бой</button>
       </div>
     `;
-
     const userName = document.querySelector('#nameUser');
-    userName.textContent = localStorage.getItem('username');
+    userName.textContent = JSON.parse(localStorage.getItem('User')).name;
+
+    const btnStart = div.querySelector('.btnStart');
+    btnStart.addEventListener('click', this.startBattle)
+
     return div;
+  }
+
+   startBattle() {
+    location.hash = '/battle';
   }
 }

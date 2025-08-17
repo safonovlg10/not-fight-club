@@ -1,30 +1,9 @@
-<!DOCTYPE html>
-<html lang="ru">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Not Fight Club</title>
-    <link rel="stylesheet" href="./css/style.css">
-  </head>
-  <body>
-    <header>
-      <div class="nav-app">
-        <nav>
-          <div class="brand">
-            <span class="dot"></span>Not Fight Club Codejam
-          </div>
-          <code id="nameUser"></code>
-          <div class="links" id="navLinks">
-            <a href="#/" data-route>Home</a>
-            <a href="#/todos" data-route>Users</a>
-            <a href="#/setting" data-route>Setting</a>
-          </div>
-        </nav>
-      </div>
-    </header>
-    <main class="app">
-      <!-- <div class="home__container">
-        <div class="card cart-character__container">
+export default class Battle {
+  render() {
+    const div = document.createElement("div");
+    div.classList.add("home__container");
+    div.innerHTML = `
+     <div class="card cart-character__container">
           <div class="character-name">
             <code><b>Titanblcak</b></code>
           </div>
@@ -102,15 +81,10 @@
             </div>
           </div>
         </div>
-      </div> -->
+    `;
 
-      <!-- <button onclick=""></button> -->
-      <!-- <section id="outlet" class="card"><div class="pad">Загрузка…</div></section>
-    <section class="footer">SPA без фреймворков • Router + Store + Components</section> -->
-    </main>
-    <footer class="footer">
-      SPA без фреймворков • Router + Store + Components
-    </footer>
-    <script type="module" src="./js/index.js"></script>
-  </body>
-</html>
+    const userName = document.querySelector("#nameUser");
+    userName.textContent = JSON.parse(localStorage.getItem("User")).name;
+    return div;
+  }
+}

@@ -12,11 +12,16 @@ export default class Setting {
 
     regBtn.addEventListener('click', () => {
       if(inputName.value === '') return false;
-      let name = inputName.value.trim();
-      localStorage.setItem('username', name);
-      inputName.value = '';
       const userName = document.querySelector('#nameUser');
-      userName.textContent = localStorage.getItem('username');
+      let name = inputName.value.trim();
+      
+      const objUser = JSON.parse(localStorage.getItem('User'));
+      objUser.name = name;
+      userName.textContent = objUser.name;
+      localStorage.setItem('User', JSON.stringify(objUser));
+      inputName.value = '';
+      
+      
       console.log(localStorage)
     });
     

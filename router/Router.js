@@ -7,7 +7,7 @@ export default class Router {
   }
 
   purse() {
-    const isRegistered = !!localStorage.getItem("username");
+    const isRegistered = !!localStorage.getItem("User");
     const hash = location.hash.replace("#", "") || "/";
 
     if (!isRegistered && hash !== "/register") {
