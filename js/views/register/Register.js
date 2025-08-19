@@ -1,3 +1,4 @@
+import { Heroes } from "../../characters/charactersData.js";
 export default class Register {
   render() {
     const div = document.createElement("div");
@@ -9,9 +10,10 @@ export default class Register {
     `;
     const inputName = div.querySelector('#username');
     const regBtn = div.querySelector('#regBtn');
+    const hero = Heroes.playerCharacterData.archer;
     const user = {
       name: '',
-      activeAvatar: {},
+      activeHero: hero,
 
     }
 

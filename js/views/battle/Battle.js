@@ -1,3 +1,4 @@
+import { Heroes } from "../../characters/charactersData.js";
 export default class Battle {
   render() {
     const div = document.createElement("div");
@@ -82,7 +83,7 @@ export default class Battle {
           </div>
         </div>
     `;
-
+    Heroes.playerCharacterData.knight.attack()
     const userName = document.querySelector("#nameUser");
     userName.textContent = JSON.parse(localStorage.getItem("User")).name;
     return div;
