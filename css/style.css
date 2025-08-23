@@ -189,7 +189,7 @@ code {
 .home__container {
   display: flex;
   
-  gap: 25px;
+  gap: 50px;
 }
 .cart-character__container {
     /* width: 250px;
@@ -230,23 +230,61 @@ code {
   display: flex;
   gap: 25px;
 }
+.skills__container {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
 
 .separator {
   width: 1px;
-  height: 200px;
+  height: 300px;
   background-color: var(--accent);
 }
-
+.check-box__container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 6px 0;
+  border-top: 1px solid var(--muted);
+  border-bottom: 1px solid var(--muted);
+  cursor: pointer;
+}
+.check-box__container:hover {
+  opacity: 0.7;
+  
+}
+.check-box--active {
+  background-color: var(--muted);
+  transform: scale(1.1);
+}
+.check-box--img {
+  width: 40px;
+  height: 40px;
+}
 .health-bar {
+  position: relative;
+  width: 100%;
+  height: 27px;
   border-radius: 10px;
   background-color: var(--muted);
 }
 .health-bar--progress {
   width: 100%;
+  height: 27px;
   text-align: center;
   background-color: #771616;
   border-radius: 10px;
 }
 .health-bar--label {
-  padding: 2px 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    padding: 0;
+    margin: 0;
+    transform: translate(-50%, -50%);
+
+}
+.btnAttack {
+  background: #771616 ;
 }

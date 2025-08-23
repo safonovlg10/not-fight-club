@@ -1,4 +1,4 @@
-import { Heroes } from "../../characters/charactersData.js";
+import { playerCharacter } from "../../characters/charactersData.js";
 export default class Register {
   render() {
     const div = document.createElement("div");
@@ -8,21 +8,24 @@ export default class Register {
         <input type="text" id="username" placeholder="Ваше имя" autocomplete="additional-name">
         <button type="button" class="btn" id="regBtn">Зарегистрироваться</button>
     `;
-    const inputName = div.querySelector('#username');
-    const regBtn = div.querySelector('#regBtn');
-    const hero = Heroes.playerCharacterData.archer;
+    const inputName = div.querySelector("#username");
+    const regBtn = div.querySelector("#regBtn");
+
+    const hero = playerCharacter.knight.name;
+
     const user = {
-      name: '',
+      name: "",
       activeHero: hero,
+      enemyHero: 'Troll',
 
-    }
+    };
 
-    regBtn.addEventListener('click', () => {
-      if(inputName.value === '') return false;
+    regBtn.addEventListener("click", () => {
+      if (inputName.value === "") return false;
       let name = inputName.value.trim();
       user.name = name;
-      localStorage.setItem('User', JSON.stringify(user));
-      location.hash = '/';
+      localStorage.setItem("User", JSON.stringify(user));
+      location.hash = "/";
     });
 
     return div;

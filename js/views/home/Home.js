@@ -1,10 +1,11 @@
-import { Heroes } from "../../characters/charactersData.js";
+import { playerCharacter } from "../../characters/charactersData.js";
 
 export default class Home {
  
   render() {
     const div = document.createElement("div");
-    const currentHero = JSON.parse(localStorage.getItem('User')).activeHero;
+    const currentHero = this.getHero();
+
     div.classList.add("home__container");
     div.innerHTML = `
       <div class="card cart-character__container">
@@ -30,5 +31,9 @@ export default class Home {
 
    startBattle() {
     location.hash = '/battle';
+  }
+  getHero() {
+    const name = JSON.parse(localStorage.getItem('User')).activeHero.toLowerCase();
+    return playerCharacter[name];
   }
 }
