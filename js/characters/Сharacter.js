@@ -25,6 +25,10 @@ export default class Character {
     this.inventory = [];
     this.countAttack = countAttack;
     this.countProtection = countProtection;
+
+    this.countActiveAttack = 0;
+    this.countActiveProtection = 0;
+
     this.skills = {
       attack: [
         { name: "head", damage: 125, active: false },
@@ -64,12 +68,12 @@ export default class Character {
   }
 
   checkCountActiveSkills(list, id) {
-    const [skills] = id.split("-");
-    if (skills === "attack") {
-      const count = list[skills].filter((el) => el.active === true).length;
+    const [type] = id.split("-");
+    if (type === "attack") {
+      const count = list[type].filter((el) => el.active === true).length;
       if (count >= this.countAttack) return false;
-    } else if (skills === "protection") {
-      const count = list[skills].filter((el) => el.active === true).length;
+    } else if (type === "protection") {
+      const count = list[type].filter((el) => el.active === true).length;
       if (count >= this.countProtection) return false;
     }
     return true;
@@ -89,18 +93,40 @@ export default class Character {
     const [skills, nameSkills] = id.split("-");
     for (const element of listSkils[skills]) {
       if (element.name === nameSkills) {
+        if(skills === 'attack') {
+          if(!element.active) {
+            this.countActiveAttack++;
+          } else {
+            this.countActiveAttack--;
+          }
+        }
+        if(skills === 'protection') {
+          if(!element.active) {
+            this.countActiveProtection++;
+          } else {
+            this.countActiveProtection--;
+          }
+        }
         element.active = !element.active;
       }
     }
+    console.log(this.countActiveAttack, this.countActiveProtection)
   }
 
-  removeAllActiveSkillsInObj(listSkils) {
-    for (const skills of listSkils) {
-      for (const element of skills) {
+  removeAllActiveSkillsInObj() {
+    for (const key in this.skills) {
+      for (const element of this.skills[key]) {
         if (element.active) {
           element.active = false;
         }
       }
     }
+  }
+  resetHero() {
+    this.removeAllActiveSkillsInObj();
+    this.countActiveAttack = 0;
+    this.countActiveProtection = 0;
+    this.health = this.healthStatic;
+    this.kill = false;
   }
 }

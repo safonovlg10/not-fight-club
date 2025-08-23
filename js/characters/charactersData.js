@@ -39,7 +39,7 @@ const troll = new Troll({
   avater: "default.jpg",
   health: 1750,
   protection: 300,
-  countAttack: 1,
+  countAttack: 2,
   countProtection: 2,
 });
 

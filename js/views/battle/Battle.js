@@ -33,10 +33,10 @@ export default class Battle {
     btnAttack.type = 'button';
     btnAttack.classList.add('btn', 'btnAttack');
     btnAttack.textContent = 'Атаковать';
+    btnAttack.disabled = true;
+    btnAttack.classList.add('btn--disabled');
 
     battleControls.append(controlsBox, btnAttack);
-
-    console.log(playerHero);
 
     div.append(playerCart, battleControls, enemyCart);
 
@@ -55,29 +55,36 @@ export default class Battle {
     return playerCharacter[playerName];
   }
 
-  playerAttack(playerHero, enemyHero, playerCart, enemyCart) {
+  playerAttack(playerHero, enemyHero, enemyCart) {
     const attack = playerHero.attack();
     enemyHero.takeDamage(attack);
-    console.log(playerHero, enemyHero);
     this.updateHealth(enemyCart, enemyHero.health, enemyHero.healthStatic);
     return enemyHero.kill;
 
   }
 
-  enemyAttack(playerHero, enemyHero) {
+  enemyAttack(playerHero, enemyHero, playerCart) {
+    const attack = enemyHero.attack();
+    playerHero.takeDamage(attack);
+    this.updateHealth(playerCart, playerHero.health, playerHero.healthStatic);
     return playerHero.kill;
   }
 
   battleMode(playerHero, enemyHero, playerCart, enemyCart) {
 
       if(playerHero.health > 0 && enemyHero.health > 0) {
-        if(this.playerAttack(playerHero, enemyHero, playerCart, enemyCart)) {
+        const enemyProtectionActiveSkills = enemyHero.choiceRandomSkills('protection')
+        if(this.playerAttack(playerHero, enemyHero, enemyCart)) {
           console.log('бой окончен проиграл enemyHero');
-        } else if(this.enemyAttack(playerHero, enemyHero)) {
+          this.resetBattle(playerHero, enemyHero, playerCart, enemyCart);
+        } else if(this.enemyAttack(playerHero, enemyHero, playerCart)) {
           console.log('бой окончен проиграл playerHero');
+          this.resetBattle(playerHero, enemyHero, playerCart, enemyCart);
         }
-
       }
+      
+      // enemyHero.removeAllActiveSkillsInObj();
+      
   }
 
   updateHealth(heroCard, heroHealth, healthStatic) {
@@ -85,6 +92,21 @@ export default class Battle {
     lable.textContent = `${heroHealth}/${healthStatic}`;
     const progress = heroCard.querySelector('.health-bar--progress');
     progress.style.width = `${(heroHealth / healthStatic) * 100}%`;
+  }
+
+  resetActiveClass() {
+    const listSkils = document.querySelectorAll('.check-box__container');
+    listSkils.forEach((el) => el.classList.remove('check-box--active'));
+  }
+
+  resetBattle(playerHero, enemyHero, playerCart, enemyCart) {
+    enemyHero.resetHero();
+    playerHero.resetHero();
+    this.updateHealth(enemyCart, enemyHero.health, enemyHero.healthStatic);
+    this.updateHealth(playerCart, playerHero.health, playerHero.healthStatic);
+    this.resetActiveClass();
+    const btnAttack = document.querySelector('.btnAttack');
+    btnAttack.classList.add('btn--disabled');
   }
 
   

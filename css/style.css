@@ -255,7 +255,7 @@ code {
   
 }
 .check-box--active {
-  background-color: var(--muted);
+  background-color: #121d2d;
   transform: scale(1.1);
 }
 .check-box--img {
@@ -285,6 +285,12 @@ code {
     transform: translate(-50%, -50%);
 
 }
+
 .btnAttack {
   background: #771616 ;
+}
+
+.btn--disabled {
+  background-color: var(--muted);
+  pointer-events: none;
 }

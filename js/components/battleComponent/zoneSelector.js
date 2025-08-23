@@ -28,7 +28,6 @@ export default function zoneSelector(type = "attack", listSkils, playerHero) {
       const id = el.id;
 
       if (playerHero.checkActiveSkill(listSkils, id)) {
-        // removeActiveSkillInObj(listSkils, id);
         playerHero.setActiveSkillInObj(listSkils, id);
         toggleActiveClass(el);
       } else {
@@ -38,9 +37,17 @@ export default function zoneSelector(type = "attack", listSkils, playerHero) {
           playerHero.setActiveSkillInObj(listSkils, id);
         }
       }
+      const btnAttack = document.querySelector('.btnAttack');
+      if(playerHero.countActiveAttack === playerHero.countAttack && playerHero.countActiveProtection === playerHero.countProtection) {
+        btnAttack.disabled = false;
+        btnAttack.classList.remove('btn--disabled');
+      } else {
+        btnAttack.classList.add('btn--disabled');
+        btnAttack.disabled = true;
+      }
 
-      // console.log(isAddSkills)
-      //   if(isAddSkills) {
+      //   if(isAddSkills) {  this.countActiveAttack = 0;
+    // this.countActiveProtection = 0;
       // toggleActiveClass(el);
       // setActiveSkillInObj(listSkils, id);
       //     return;
