@@ -8,7 +8,7 @@ export default class Home {
 
     div.classList.add("home__container");
     div.innerHTML = `
-      <div class="card cart-character__container">
+      <div class="card cart-character-home__container ">
         <img src="./assets/img/${currentHero.avater}" alt="${currentHero.name}-knight" class="cart-character__img">
       </div>
       <div class="home__content-conateiner">
