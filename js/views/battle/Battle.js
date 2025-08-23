@@ -96,7 +96,7 @@ export default class Battle {
     const attack = enemyHero.attack();
     playerHero.takeDamage(attack);
     this.updateHealth(playerCart, playerHero.health, playerHero.healthStatic);
-    this.addLog(`Враг атаковал: ${enemyHero.name}, вы защищались: ${playerDefense} → ${damageToPlayer} урона`);
+    // this.addLog(`Враг атаковал: ${enemyHero.name}, вы защищались: ${playerDefense} → ${damageToPlayer} урона`);
     return playerHero.kill;
   }
 
