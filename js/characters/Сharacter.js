@@ -44,13 +44,21 @@ export default class Character {
       ],
     };
   }
-  takeDamage(damage) {
-    damage.forEach((attack) => {
+  getActiveProtectionSkills() {
+    return this.skills.protection.filter((el) => el.active === true);
+  }
+  
+  takeDamage(attack) {
+    let sumDamage = 0;
+    
+    attack.forEach((attack) => {
       this.skills.protection.forEach((protection) => {
         if (attack.name === protection.name) {
-          if (protection.active) {
+          
+          if (!protection.active) {
+            console.log(attack.name, protection.name, protection )
             this.health -= attack.damage;
-
+            sumDamage += attack.damage;
             if (this.health <= 0) {
               this.health = 0;
               this.kill = true;
@@ -59,6 +67,7 @@ export default class Character {
         }
       });
     });
+    return sumDamage;
   }
   attack() {
     const activeAttack = this.skills.attack.filter(

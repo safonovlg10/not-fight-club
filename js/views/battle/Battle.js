@@ -74,7 +74,10 @@ export default class Battle {
     const li = document.createElement("li");
     li.textContent = message;
     ul.append(li);
-    // ul.scrollTop = ul.scrollHeight;
+  }
+  clearLogo() {
+    const ul = document.querySelector(".log-list");
+    ul.innerHTML = '';
   }
 
   getHero(playerCharacter, nameId) {
@@ -86,34 +89,40 @@ export default class Battle {
 
   playerAttack(playerHero, enemyHero, enemyCart) {
     const attack = playerHero.attack();
-    enemyHero.takeDamage(attack);
+    const damage = enemyHero.takeDamage(attack);
     this.updateHealth(enemyCart, enemyHero.health, enemyHero.healthStatic);
-    this.addLog(`Вы атаковали: ${playerHero.name}, враг защищался: ${'2'} → ${'3'} урона`)
+    this.addLog(`${playerHero.name}: Нанес удар ${this.parseSkillsLog(attack)}, враг защищался: ${this.parseSkillsLog(enemyHero.getActiveProtectionSkills())} → ${damage} урона`);
     return enemyHero.kill;
   }
 
+  parseSkillsLog(skills) {
+    return skills.map((el => el.name)).join(', ');
+  }
   enemyAttack(playerHero, enemyHero, playerCart) {
     const attack = enemyHero.attack();
-    playerHero.takeDamage(attack);
+    const damage = playerHero.takeDamage(attack);
     this.updateHealth(playerCart, playerHero.health, playerHero.healthStatic);
-    // this.addLog(`Враг атаковал: ${enemyHero.name}, вы защищались: ${playerDefense} → ${damageToPlayer} урона`);
+    this.addLog(`${enemyHero.name}: Нанес удар ${this.parseSkillsLog(attack)}, вы защищался: ${this.parseSkillsLog(playerHero.getActiveProtectionSkills())} → ${damage} урона`);
     return playerHero.kill;
   }
 
   battleMode(playerHero, enemyHero, playerCart, enemyCart) {
     if (playerHero.health > 0 && enemyHero.health > 0) {
-      const enemyProtectionActiveSkills =
-        enemyHero.choiceRandomSkills("protection");
+      const enemyProtectionActiveSkills = enemyHero.choiceRandomSkills("protection");
+      console.log(enemyProtectionActiveSkills, enemyHero)
       if (this.playerAttack(playerHero, enemyHero, enemyCart)) {
         console.log("бой окончен проиграл enemyHero");
         this.resetBattle(playerHero, enemyHero, playerCart, enemyCart);
+        this.clearLogo();
       } else if (this.enemyAttack(playerHero, enemyHero, playerCart)) {
         console.log("бой окончен проиграл playerHero");
         this.resetBattle(playerHero, enemyHero, playerCart, enemyCart);
+        this.clearLogo();
       }
     }
 
-    // enemyHero.removeAllActiveSkillsInObj(); todo
+    enemyHero.removeAllActiveSkillsInObj(); 
+
   }
 
   updateHealth(heroCard, heroHealth, healthStatic) {
