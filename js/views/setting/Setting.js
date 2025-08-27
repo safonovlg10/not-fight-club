@@ -17,7 +17,7 @@ export default class Setting {
       
       const objUser = JSON.parse(localStorage.getItem('User'));
       objUser.name = name;
-      userName.textContent = objUser.name;
+      userName.textContent = `Ваше имя: ${objUser.name}`;
       localStorage.setItem('User', JSON.stringify(objUser));
       inputName.value = '';
       

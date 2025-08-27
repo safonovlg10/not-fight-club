@@ -65,7 +65,7 @@ export default class Battle {
     });
 
     const userName = document.querySelector("#nameUser");
-    userName.textContent = JSON.parse(localStorage.getItem("User")).name;
+    userName.textContent = `Ваше имя: ${JSON.parse(localStorage.getItem('User')).name}`;
     return div;
   }
 

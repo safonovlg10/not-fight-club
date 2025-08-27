@@ -21,7 +21,7 @@ export default class Home {
       </div>
     `;
     const userName = document.querySelector('#nameUser');
-    userName.textContent = JSON.parse(localStorage.getItem('User')).name;
+    userName.textContent = `Ваше имя: ${JSON.parse(localStorage.getItem('User')).name}`;
     
     const btnStart = div.querySelector('.btnStart');
     btnStart.addEventListener('click', this.startBattle)
