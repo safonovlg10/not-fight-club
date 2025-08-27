@@ -32,6 +32,8 @@ const archer = new Archer({
     "pngtree-ornate-white-and-gold-fantasy-knight-armor-with-swords-insectoid-legs-png-image_16699743.webp",
   health: 750,
   protection: 200,
+  countAttack: 2,
+  countProtection: 2,
 });
 
 const troll = new Troll({

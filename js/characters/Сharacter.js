@@ -54,9 +54,7 @@ export default class Character {
     attack.forEach((attack) => {
       this.skills.protection.forEach((protection) => {
         if (attack.name === protection.name) {
-          
           if (!protection.active) {
-            console.log(attack.name, protection.name, protection )
             this.health -= attack.damage;
             sumDamage += attack.damage;
             if (this.health <= 0) {
