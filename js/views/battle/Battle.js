@@ -33,6 +33,7 @@ export default class Battle {
 
     const controlsBox = document.createElement("div");
     controlsBox.classList.add("battle-controls");
+    console.log(playerHero);
 
     const attack = zoneSelector("attack", playerHero.skills, playerHero);
     const protection = zoneSelector(
@@ -65,19 +66,21 @@ export default class Battle {
     });
 
     const userName = document.querySelector("#nameUser");
-    userName.textContent = `Ваше имя: ${JSON.parse(localStorage.getItem('User')).name}`;
+    userName.textContent = `Ваше имя: ${
+      JSON.parse(localStorage.getItem("User")).name
+    }`;
     return div;
   }
 
   addLog(message) {
     const ul = document.querySelector(".log-list");
     const li = document.createElement("li");
-    li.textContent = message;
+    li.innerHTML = message;
     ul.append(li);
   }
   clearLogo() {
     const ul = document.querySelector(".log-list");
-    ul.innerHTML = '';
+    ul.innerHTML = "";
   }
 
   getHero(playerCharacter, nameId) {
@@ -88,28 +91,70 @@ export default class Battle {
   }
 
   playerAttack(playerHero, enemyHero, enemyCart) {
+    enemyHero.isCrit = Math.random() < enemyHero.critChance;
     const attack = playerHero.attack();
-    const damage = enemyHero.takeDamage(attack);
+    const damage = enemyHero.takeDamage(attack, enemyHero.isCrit, enemyHero.protection, enemyHero.skills.protection);
     this.updateHealth(enemyCart, enemyHero.health, enemyHero.healthStatic);
-    this.addLog(`${playerHero.name}: Нанес удар ${this.parseSkillsLog(attack)}, враг защищался: ${this.parseSkillsLog(enemyHero.getActiveProtectionSkills())} → ${damage} урона`);
+    if (enemyHero.isCrit) {
+      this.addLog(
+        `<span class="logo-name-player">${
+          playerHero.name
+        }</span>: <span class="logo-crit-damage"> Нанес Критический удар </span>${this.parseSkillsLog(
+          attack
+        )}, враг защищался: ${this.parseSkillsLog(
+          enemyHero.getActiveProtectionSkills()
+        )} → <span class="logo-crit-damage">${damage} урона</span>`
+      );
+    } else {
+      this.addLog(
+        `<span class="logo-name-player">${
+          playerHero.name
+        }</span>: Нанес удар ${this.parseSkillsLog(
+          attack
+        )}, враг защищался: ${this.parseSkillsLog(
+          enemyHero.getActiveProtectionSkills()
+        )} → ${damage} урона`
+      );
+    }
     return enemyHero.kill;
   }
 
   parseSkillsLog(skills) {
-    return skills.map((el => el.name)).join(', ');
+    return skills.map((el) => el.name).join(", ");logo-name-enemy
   }
   enemyAttack(playerHero, enemyHero, playerCart) {
+    playerHero.isCrit = Math.random() < playerHero.critChance;
     const attack = enemyHero.attack();
-    const damage = playerHero.takeDamage(attack);
+    const damage = playerHero.takeDamage(attack, playerHero.isCrit, playerHero.protection, playerHero.skills.protection);
     this.updateHealth(playerCart, playerHero.health, playerHero.healthStatic);
-    this.addLog(`${enemyHero.name}: Нанес удар ${this.parseSkillsLog(attack)}, вы защищался: ${this.parseSkillsLog(playerHero.getActiveProtectionSkills())} → ${damage} урона`);
+    if (playerHero.isCrit) {
+      this.addLog(
+        `<span class="logo-name-enemy">${
+          enemyHero.name
+        }</span>: <span class="logo-crit-damage"> Нанес Критический удар </span>${this.parseSkillsLog(
+          attack
+        )}, враг защищался: ${this.parseSkillsLog(
+          playerHero.getActiveProtectionSkills()
+        )} → <span class="logo-crit-damage">${damage} урона</span>`
+      );
+    } else {
+      this.addLog(
+        `<span class="logo-name-enemy">${
+          enemyHero.name
+        }</span>: Нанес удар ${this.parseSkillsLog(
+          attack
+        )}, враг защищался: ${this.parseSkillsLog(
+          playerHero.getActiveProtectionSkills()
+        )} → ${damage} урона`
+      );
+    }
     return playerHero.kill;
   }
 
   battleMode(playerHero, enemyHero, playerCart, enemyCart) {
     if (playerHero.health > 0 && enemyHero.health > 0) {
-      const enemyProtectionActiveSkills = enemyHero.choiceRandomSkills("protection");
-      console.log(enemyProtectionActiveSkills, enemyHero)
+      const enemyProtectionActiveSkills =
+        enemyHero.choiceRandomSkills("protection");
       if (this.playerAttack(playerHero, enemyHero, enemyCart)) {
         console.log("бой окончен проиграл enemyHero");
         this.resetBattle(playerHero, enemyHero, playerCart, enemyCart);
@@ -121,8 +166,7 @@ export default class Battle {
       }
     }
 
-    enemyHero.removeAllActiveSkillsInObj(); 
-
+    enemyHero.removeAllActiveSkillsInObj();
   }
 
   updateHealth(heroCard, heroHealth, healthStatic) {

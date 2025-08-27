@@ -321,6 +321,15 @@ code {
 .log-list li {
   margin-bottom: 5px;
 }
+.logo-name-player {
+  color: #eab308;
+}
+.logo-name-enemy {
+  color: #22d3ee;
+}
+.logo-crit-damage {
+  color: #c21313;
+}
 
 /* users */
 
