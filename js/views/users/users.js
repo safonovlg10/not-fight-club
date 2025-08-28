@@ -14,10 +14,6 @@ export default class Users {
     modalWindow.id = "modal";
     modalWindow.classList.add("modal");
 
-    const span = document.createElement("span");
-    span.classList.add("close-btn");
-    span.textContent = "&times;";
-
     arrCharacters.forEach((character) => {
       const card = userCard(character.name, character.avater);
       card.addEventListener("click", (e) => {

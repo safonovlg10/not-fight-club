@@ -25,16 +25,72 @@ export default class Character {
     this.inventory = [];
     this.countAttack = countAttack;
     this.countProtection = countProtection;
-
-    this.countActiveAttack = 0;
+    this.isCrit = false;
+    (this.critChance = 0.20), (this.countActiveAttack = 0);
     this.countActiveProtection = 0;
 
     this.skills = {
       attack: [
-        { name: "head", damage: 125, active: false },
-        { name: "neck", damage: 80, active: false },
-        { name: "body", damage: 50, active: false },
-        { name: "legs", damage: 25, active: false },
+        {
+          name: "head",
+          damage: (isCrit, protection) =>
+            this.calculateDamage(125, protection, isCrit),
+          active: false,
+        },
+        {
+          name: "neck",
+          damage: (isCrit, protection) =>
+            this.calculateDamage(120, protection, isCrit),
+          active: false,
+        },
+        {
+          name: "body",
+          damage: (isCrit, protection) =>
+            this.calculateDamage(115, protection, isCrit),
+          active: false,
+        },
+        {
+          name: "legs",
+          damage: (isCrit, protection) =>
+            this.calculateDamage(110, protection, isCrit),
+          active: false,
+        },
+      ],
+      protection: [
+        { name: "head", active: false },
+        { name: "neck", active: false },
+        { name: "body", active: false },
+        { name: "legs", active: false },
+      ],
+    };
+  }
+  restoreSkills() {
+        this.skills = {
+      attack: [
+        {
+          name: "head",
+          damage: (isCrit, protection) =>
+            this.calculateDamage(125, protection, isCrit),
+          active: false,
+        },
+        {
+          name: "neck",
+          damage: (isCrit, protection) =>
+            this.calculateDamage(120, protection, isCrit),
+          active: false,
+        },
+        {
+          name: "body",
+          damage: (isCrit, protection) =>
+            this.calculateDamage(115, protection, isCrit),
+          active: false,
+        },
+        {
+          name: "legs",
+          damage: (isCrit, protection) =>
+            this.calculateDamage(110, protection, isCrit),
+          active: false,
+        },
       ],
       protection: [
         { name: "head", active: false },
@@ -47,23 +103,45 @@ export default class Character {
   getActiveProtectionSkills() {
     return this.skills.protection.filter((el) => el.active === true);
   }
-  
-  takeDamage(attack) {
+
+  calculateDamage(baseDamage, protection, isCrit, critMultiplier = 1.5) {
+    let damage = baseDamage;
+
+    if (isCrit) {
+      damage *= critMultiplier;
+    }
+
+    const finalDamage = Math.floor(damage * (100 / (100 + protection)));
+
+    return finalDamage;
+  }
+
+  takeDamage(attack, isCrit, protectionHero, skillsProtection) {
     let sumDamage = 0;
-    
     attack.forEach((attack) => {
-      this.skills.protection.forEach((protection) => {
-        if (attack.name === protection.name) {
-          if (!protection.active) {
-            this.health -= attack.damage;
-            sumDamage += attack.damage;
-            if (this.health <= 0) {
-              this.health = 0;
-              this.kill = true;
+      if (isCrit) {
+        const damage = attack.damage(isCrit, protectionHero);
+        this.health -= damage;
+        sumDamage += damage;
+        if (this.health <= 0) {
+          this.health = 0;
+          this.kill = true;
+        }
+      } else {
+        skillsProtection.forEach((protection) => {
+          if (attack.name === protection.name) {
+            if (protection.active) {
+              const damage = attack.damage(isCrit, protectionHero);
+              this.health -= damage;
+              sumDamage += damage;
+              if (this.health <= 0) {
+                this.health = 0;
+                this.kill = true;
+              }
             }
           }
-        }
-      });
+        });
+      }
     });
     return sumDamage;
   }
@@ -100,15 +178,15 @@ export default class Character {
     const [skills, nameSkills] = id.split("-");
     for (const element of listSkils[skills]) {
       if (element.name === nameSkills) {
-        if(skills === 'attack') {
-          if(!element.active) {
+        if (skills === "attack") {
+          if (!element.active) {
             this.countActiveAttack++;
           } else {
             this.countActiveAttack--;
           }
         }
-        if(skills === 'protection') {
-          if(!element.active) {
+        if (skills === "protection") {
+          if (!element.active) {
             this.countActiveProtection++;
           } else {
             this.countActiveProtection--;
@@ -117,7 +195,6 @@ export default class Character {
         element.active = !element.active;
       }
     }
-    console.log(this.countActiveAttack, this.countActiveProtection)
   }
 
   removeAllActiveSkillsInObj() {
@@ -135,5 +212,22 @@ export default class Character {
     this.countActiveProtection = 0;
     this.health = this.healthStatic;
     this.kill = false;
+  }
+
+    choiceRandomSkills(type = 'attack') {
+    const map = new Map();
+    let count = 0;
+    const countSkills = type === 'attack' ? this.countAttack : this.countProtection;
+    const arrSkills = this.skills[type]; 
+    while(count < countSkills){
+      let el = arrSkills[Math.floor(Math.random() * arrSkills.length)]
+      if(!map.has(el)) {
+        el.active = true;
+        map.set(el, el);
+        count++;
+      }
+    }
+    
+    return Array.from(map.values());
   }
 }

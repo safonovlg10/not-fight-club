@@ -5,11 +5,38 @@ import {
 import characterCard from "../../components/battleComponent/characterCard.js";
 import zoneSelector from "../../components/battleComponent/zoneSelector.js";
 import battleLogo from "../../components/battleComponent/LogBattle.js";
+import modalEndGame from "../../components/battleComponent/modalEndGame.js";
+import Character from "../../characters/Сharacter.js";
+import Troll from "../../characters/Troll.js";
 
 export default class Battle {
   render() {
-    const playerHero = this.getHero(playerCharacter, "activeHero");
-    const enemyHero = this.getHero(enemyCharacter, "enemyHero");
+    let playerHero;
+    let enemyHero;
+    const isSaveBattle = JSON.parse(localStorage.getItem('User')).battle;
+
+    if(false){
+
+      const playerHeroObj = this.getHeroIsLocalStorage('playerHero');
+      const enemyHeroObj = this.getHeroIsLocalStorage('enemyHero');
+      // console.log(playerHero, enemyHero)
+
+      // const playerPrototype = this.getPrototypeOfObj(playerCharacter, playerHero.name);
+      // const enemyPrototype = this.getPrototypeOfObj(enemyCharacter, enemyHero.name);;
+      // console.log(playerPrototype[[Prototype]], enemyPrototype[[Prototype]])
+      Object.setPrototypeOf(playerHeroObj, Character.prototype);
+      Object.setPrototypeOf(enemyHeroObj, Character.prototype);
+      playerHeroObj.restoreSkills();
+      // enemyHeroObj.restoreSkills();
+
+      playerHero = playerHeroObj;
+      enemyHero = enemyHeroObj;
+    } else {
+
+      playerHero = this.getHero(playerCharacter, "activeHero");
+      enemyHero = this.getHero(enemyCharacter, "enemyHero");
+    }
+
 
     const div = document.createElement("div");
     div.classList.add("home__container");
@@ -26,6 +53,8 @@ export default class Battle {
       enemyHero.health,
       enemyHero.healthStatic
     );
+    this.updateHealth(playerCart, playerHero.health, playerHero.healthStatic);
+    this.updateHealth(enemyCart, enemyHero.health, enemyHero.healthStatic);
 
     const battleControls = document.createElement("div");
     battleControls.classList.add("skills__container");
@@ -33,6 +62,7 @@ export default class Battle {
 
     const controlsBox = document.createElement("div");
     controlsBox.classList.add("battle-controls");
+    
 
     const attack = zoneSelector("attack", playerHero.skills, playerHero);
     const protection = zoneSelector(
@@ -57,72 +87,211 @@ export default class Battle {
 
     div.append(playerCart, battleControls, enemyCart);
 
+    if(playerHero.countActiveAttack === playerHero.countAttack && playerHero.countActiveProtection === playerHero.countProtection) {
+      btnAttack.disabled = false;
+      btnAttack.classList.remove('btn--disabled');
+    } else {
+      btnAttack.classList.add('btn--disabled');
+      btnAttack.disabled = true;
+    }
+
     const logoBox = battleLogo();
     div.append(logoBox);
+
+    const modalWindowEndGame = document.createElement("div");
+    modalWindowEndGame.id = "modal-end-game";
+    modalWindowEndGame.classList.add('modal' ,"modal-end-game");
+    div.append(modalWindowEndGame);
 
     btnAttack.addEventListener("click", () => {
       this.battleMode(playerHero, enemyHero, playerCart, enemyCart);
     });
 
     const userName = document.querySelector("#nameUser");
-    userName.textContent = `Ваше имя: ${JSON.parse(localStorage.getItem('User')).name}`;
+    userName.textContent = `Ваше имя: ${
+      JSON.parse(localStorage.getItem("User")).name
+    }`;
+   
     return div;
+  }
+  getPrototypeOfObj(obj, name) {
+    return obj[name.toLowerCase()];
+  }
+
+  setSatistics(hero, type) {
+    const user = JSON.parse(localStorage.getItem('User'));
+    console.log(user)
+    if(user.statistics.length === 0) {
+      const obj = {
+        name: hero,
+        win: 0,
+        los: 0,
+      }
+      obj[type] += 1;
+      user.statistics.push(obj);
+      localStorage.setItem('User', JSON.stringify(user));
+    } else {
+      
+      const obj = user.statistics.find((el) => el.name === hero);
+      if(!obj) {
+        
+        const obj = {
+          name: hero,
+          win: 0,
+          los: 0,
+        }
+        obj[type] += 1;
+        user.statistics.push(obj);
+      } else {
+        obj[type] += 1;
+      }
+      
+      console.log(user.statistics, hero)
+      
+      localStorage.setItem('User', JSON.stringify(user));
+      
+    }
+  }
+
+  openModalEndGame(hero, massage) {
+    const modal = document.querySelector('.modal-end-game');
+    modal.innerHTML = '';
+    modal.append(modalEndGame(hero, massage));
+    modal.style.display= 'block';
+
+    modal.querySelector('.close-btn').addEventListener('click', () => {
+      modal.style.display= 'none';
+    })
+    modal.querySelector('.btnRedirect').addEventListener('click', () => {
+      location.hash = '/';
+    })
   }
 
   addLog(message) {
     const ul = document.querySelector(".log-list");
     const li = document.createElement("li");
-    li.textContent = message;
+    li.innerHTML = message;
     ul.append(li);
+    return ul;
   }
   clearLogo() {
     const ul = document.querySelector(".log-list");
-    ul.innerHTML = '';
+    ul.innerHTML = "";
   }
 
   getHero(playerCharacter, nameId) {
-    const playerName = JSON.parse(localStorage.getItem("User"))[
-      nameId
-    ].toLowerCase();
+    const playerName = JSON.parse(localStorage.getItem("User"))[nameId].toLowerCase();
     return playerCharacter[playerName];
   }
+   getHeroIsLocalStorage(player) {
+    const hero = JSON.parse(localStorage.getItem("User"));
+    return hero.battle[player];
+   }
 
   playerAttack(playerHero, enemyHero, enemyCart) {
+    enemyHero.isCrit = Math.random() < enemyHero.critChance;
+    let logo = null;
     const attack = playerHero.attack();
-    const damage = enemyHero.takeDamage(attack);
+    const damage = enemyHero.takeDamage(attack, enemyHero.isCrit, enemyHero.protection, enemyHero.skills.protection);
     this.updateHealth(enemyCart, enemyHero.health, enemyHero.healthStatic);
-    this.addLog(`${playerHero.name}: Нанес удар ${this.parseSkillsLog(attack)}, враг защищался: ${this.parseSkillsLog(enemyHero.getActiveProtectionSkills())} → ${damage} урона`);
+    if (enemyHero.isCrit) {
+      logo = this.addLog(
+        `<span class="logo-name-player">${
+          playerHero.name
+        }</span>: <span class="logo-crit-damage"> Нанес Критический удар </span>${this.parseSkillsLog(
+          attack
+        )}, враг защищался: ${this.parseSkillsLog(
+          enemyHero.getActiveProtectionSkills()
+        )} → <span class="logo-crit-damage">${damage} урона</span>`
+      );
+    } else {
+      logo = this.addLog(
+        `<span class="logo-name-player">${
+          playerHero.name
+        }</span>: Нанес удар ${this.parseSkillsLog(
+          attack
+        )}, враг защищался: ${this.parseSkillsLog(
+          enemyHero.getActiveProtectionSkills()
+        )} → ${damage} урона`
+      );
+    }
+    this.saveCurrentBattle(playerHero, enemyHero, logo)
     return enemyHero.kill;
   }
 
   parseSkillsLog(skills) {
-    return skills.map((el => el.name)).join(', ');
+    return skills.map((el) => el.name).join(", ");
   }
   enemyAttack(playerHero, enemyHero, playerCart) {
+    playerHero.isCrit = Math.random() < playerHero.critChance;
+    let logo = null;
     const attack = enemyHero.attack();
-    const damage = playerHero.takeDamage(attack);
+    const damage = playerHero.takeDamage(attack, playerHero.isCrit, playerHero.protection, playerHero.skills.protection);
     this.updateHealth(playerCart, playerHero.health, playerHero.healthStatic);
-    this.addLog(`${enemyHero.name}: Нанес удар ${this.parseSkillsLog(attack)}, вы защищался: ${this.parseSkillsLog(playerHero.getActiveProtectionSkills())} → ${damage} урона`);
+    if (playerHero.isCrit) {
+      logo = this.addLog(
+        `<span class="logo-name-enemy">${
+          enemyHero.name
+        }</span>: <span class="logo-crit-damage"> Нанес Критический удар </span>${this.parseSkillsLog(
+          attack
+        )}, враг защищался: ${this.parseSkillsLog(
+          playerHero.getActiveProtectionSkills()
+        )} → <span class="logo-crit-damage">${damage} урона</span>`
+      );
+    } else {
+      logo = this.addLog(
+        `<span class="logo-name-enemy">${
+          enemyHero.name
+        }</span>: Нанес удар ${this.parseSkillsLog(
+          attack
+        )}, враг защищался: ${this.parseSkillsLog(
+          playerHero.getActiveProtectionSkills()
+        )} → ${damage} урона`
+      );
+    }
+    this.saveCurrentBattle(playerHero, enemyHero, logo);
     return playerHero.kill;
+  }
+
+  saveCurrentBattle(playerHero, enemyHero, logo) {
+    const user = JSON.parse(localStorage.getItem('User'));
+    if(!user.battle){
+      const obj = {
+        playerHero: playerHero,
+        enemyHero: enemyHero,
+        logo: logo,
+      }
+      user.battle = obj;
+      localStorage.setItem('User', JSON.stringify(user));
+    }
+    
+    user.battle.playerHero = playerHero;
+    user.battle.enemyHero = enemyHero;
+    user.battle.logo = logo;
+    localStorage.setItem('User', JSON.stringify(user));
+    console.log(user, logo)
   }
 
   battleMode(playerHero, enemyHero, playerCart, enemyCart) {
     if (playerHero.health > 0 && enemyHero.health > 0) {
-      const enemyProtectionActiveSkills = enemyHero.choiceRandomSkills("protection");
-      console.log(enemyProtectionActiveSkills, enemyHero)
+      console.log(enemyHero)
+        enemyHero.choiceRandomSkills("protection");
+
       if (this.playerAttack(playerHero, enemyHero, enemyCart)) {
-        console.log("бой окончен проиграл enemyHero");
+        this.setSatistics(playerHero.name, 'win');
+        this.openModalEndGame(playerHero, 'Бой окончен Вы одержали победу');
         this.resetBattle(playerHero, enemyHero, playerCart, enemyCart);
         this.clearLogo();
+
       } else if (this.enemyAttack(playerHero, enemyHero, playerCart)) {
-        console.log("бой окончен проиграл playerHero");
+        this.setSatistics(playerHero.name, 'los');
+        this.openModalEndGame(playerHero, 'Бой окончен Вы одержали порожение');
         this.resetBattle(playerHero, enemyHero, playerCart, enemyCart);
         this.clearLogo();
+
       }
     }
-
-    enemyHero.removeAllActiveSkillsInObj(); 
-
+    enemyHero.removeAllActiveSkillsInObj();
   }
 
   updateHealth(heroCard, heroHealth, healthStatic) {

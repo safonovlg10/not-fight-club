@@ -17,6 +17,8 @@ export default class Register {
       name: "",
       activeHero: hero,
       enemyHero: 'Troll',
+      statistics: [],
+      battle: null,
 
     };
 
