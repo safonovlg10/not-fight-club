@@ -7,7 +7,7 @@ const knight = new Knight({
   avater:
     "491-4918344_purple-medieval-knight-fantasy-knight-png-transparent-png.png",
   health: 1500,
-  protection: 150,
+  protection: 20,
   countAttack: 2,
   countProtection: 2,
 });
@@ -17,7 +17,7 @@ const archer = new Archer({
   avater:
     "pngtree-ornate-white-and-gold-fantasy-knight-armor-with-swords-insectoid-legs-png-image_16699743.webp",
   health: 1200,
-  protection: 60,
+  protection: 200,
   countAttack: 2,
   countProtection: 2,
 });

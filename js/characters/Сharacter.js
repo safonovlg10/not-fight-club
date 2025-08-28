@@ -64,6 +64,42 @@ export default class Character {
       ],
     };
   }
+  restoreSkills() {
+        this.skills = {
+      attack: [
+        {
+          name: "head",
+          damage: (isCrit, protection) =>
+            this.calculateDamage(125, protection, isCrit),
+          active: false,
+        },
+        {
+          name: "neck",
+          damage: (isCrit, protection) =>
+            this.calculateDamage(120, protection, isCrit),
+          active: false,
+        },
+        {
+          name: "body",
+          damage: (isCrit, protection) =>
+            this.calculateDamage(115, protection, isCrit),
+          active: false,
+        },
+        {
+          name: "legs",
+          damage: (isCrit, protection) =>
+            this.calculateDamage(110, protection, isCrit),
+          active: false,
+        },
+      ],
+      protection: [
+        { name: "head", active: false },
+        { name: "neck", active: false },
+        { name: "body", active: false },
+        { name: "legs", active: false },
+      ],
+    };
+  }
   getActiveProtectionSkills() {
     return this.skills.protection.filter((el) => el.active === true);
   }
@@ -176,5 +212,22 @@ export default class Character {
     this.countActiveProtection = 0;
     this.health = this.healthStatic;
     this.kill = false;
+  }
+
+    choiceRandomSkills(type = 'attack') {
+    const map = new Map();
+    let count = 0;
+    const countSkills = type === 'attack' ? this.countAttack : this.countProtection;
+    const arrSkills = this.skills[type]; 
+    while(count < countSkills){
+      let el = arrSkills[Math.floor(Math.random() * arrSkills.length)]
+      if(!map.has(el)) {
+        el.active = true;
+        map.set(el, el);
+        count++;
+      }
+    }
+    
+    return Array.from(map.values());
   }
 }

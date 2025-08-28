@@ -8,7 +8,7 @@ import Users from "./views/users/users.js";
 
 // import charactersData from "./characters/charactersData.js";
 
-localStorage.removeItem("User");
+// localStorage.removeItem("User");
 
 const routes = {
   "/": () => new Home(),
