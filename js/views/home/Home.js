@@ -1,11 +1,10 @@
-import { playerCharacter } from "../../characters/charactersData.js";
+import { enemyCharacter, playerCharacter } from "../../characters/charactersData.js";
 
 export default class Home {
  
   render() {
     const div = document.createElement("div");
     const currentHero = this.getHero();
-
     div.classList.add("home__container");
     div.innerHTML = `
       <div class="card cart-character-home__container ">
@@ -24,16 +23,28 @@ export default class Home {
     userName.textContent = `Ваше имя: ${JSON.parse(localStorage.getItem('User')).name}`;
     
     const btnStart = div.querySelector('.btnStart');
-    btnStart.addEventListener('click', this.startBattle)
+    btnStart.addEventListener('click', () => {
+      this.startBattle();
+    })
 
     return div;
   }
+    randomEnemyHero() {
+    const user = JSON.parse(localStorage.getItem('User'));
+    const arrEnemyHero = Object.keys(enemyCharacter);
+    
+    user.enemyHero = arrEnemyHero[Math.floor(Math.random() * arrEnemyHero.length)];
+    localStorage.setItem('User', JSON.stringify(user));
+
+  }
 
    startBattle() {
+    this.randomEnemyHero();
     location.hash = '/battle';
   }
   getHero() {
     const name = JSON.parse(localStorage.getItem('User')).activeHero.toLowerCase();
     return playerCharacter[name];
   }
+
 }

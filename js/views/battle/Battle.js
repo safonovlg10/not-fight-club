@@ -6,29 +6,26 @@ import characterCard from "../../components/battleComponent/characterCard.js";
 import zoneSelector from "../../components/battleComponent/zoneSelector.js";
 import battleLogo from "../../components/battleComponent/LogBattle.js";
 import modalEndGame from "../../components/battleComponent/modalEndGame.js";
-import Character from "../../characters/Сharacter.js";
-import Troll from "../../characters/Troll.js";
+
 
 export default class Battle {
   render() {
+
     let playerHero;
     let enemyHero;
     const isSaveBattle = JSON.parse(localStorage.getItem('User')).battle;
-
-    if(false){
+    
+    if(isSaveBattle){
 
       const playerHeroObj = this.getHeroIsLocalStorage('playerHero');
       const enemyHeroObj = this.getHeroIsLocalStorage('enemyHero');
-      // console.log(playerHero, enemyHero)
+  
+      Object.setPrototypeOf(playerHeroObj, playerCharacter[playerHeroObj.name.toLowerCase()]);
+      Object.setPrototypeOf(enemyHeroObj, enemyCharacter[enemyHeroObj.name.toLowerCase()]);
 
-      // const playerPrototype = this.getPrototypeOfObj(playerCharacter, playerHero.name);
-      // const enemyPrototype = this.getPrototypeOfObj(enemyCharacter, enemyHero.name);;
-      // console.log(playerPrototype[[Prototype]], enemyPrototype[[Prototype]])
-      Object.setPrototypeOf(playerHeroObj, Character.prototype);
-      Object.setPrototypeOf(enemyHeroObj, Character.prototype);
-      playerHeroObj.restoreSkills();
-      // enemyHeroObj.restoreSkills();
-
+      playerHeroObj.restoreSkills(playerHeroObj.skills);
+      enemyHeroObj.restoreSkills(enemyHeroObj.skills);
+   
       playerHero = playerHeroObj;
       enemyHero = enemyHeroObj;
     } else {
@@ -97,6 +94,12 @@ export default class Battle {
 
     const logoBox = battleLogo();
     div.append(logoBox);
+    if(isSaveBattle) {
+      const logoList = logoBox.querySelector('.log-list');
+      logoList.innerHTML = isSaveBattle.logo;
+    }
+    
+    
 
     const modalWindowEndGame = document.createElement("div");
     modalWindowEndGame.id = "modal-end-game";
@@ -146,8 +149,6 @@ export default class Battle {
         obj[type] += 1;
       }
       
-      console.log(user.statistics, hero)
-      
       localStorage.setItem('User', JSON.stringify(user));
       
     }
@@ -172,7 +173,7 @@ export default class Battle {
     const li = document.createElement("li");
     li.innerHTML = message;
     ul.append(li);
-    return ul;
+    return ul.innerHTML;
   }
   clearLogo() {
     const ul = document.querySelector(".log-list");
@@ -259,7 +260,7 @@ export default class Battle {
       const obj = {
         playerHero: playerHero,
         enemyHero: enemyHero,
-        logo: logo,
+        logo: [logo],
       }
       user.battle = obj;
       localStorage.setItem('User', JSON.stringify(user));
@@ -269,12 +270,16 @@ export default class Battle {
     user.battle.enemyHero = enemyHero;
     user.battle.logo = logo;
     localStorage.setItem('User', JSON.stringify(user));
-    console.log(user, logo)
+  }
+  deleteCurrentBattle() {
+    const user = JSON.parse(localStorage.getItem('User'));
+    user.battle = null;
+    localStorage.setItem('User', JSON.stringify(user));
+
   }
 
   battleMode(playerHero, enemyHero, playerCart, enemyCart) {
     if (playerHero.health > 0 && enemyHero.health > 0) {
-      console.log(enemyHero)
         enemyHero.choiceRandomSkills("protection");
 
       if (this.playerAttack(playerHero, enemyHero, enemyCart)) {
@@ -282,12 +287,14 @@ export default class Battle {
         this.openModalEndGame(playerHero, 'Бой окончен Вы одержали победу');
         this.resetBattle(playerHero, enemyHero, playerCart, enemyCart);
         this.clearLogo();
+        this.deleteCurrentBattle();
 
       } else if (this.enemyAttack(playerHero, enemyHero, playerCart)) {
         this.setSatistics(playerHero.name, 'los');
         this.openModalEndGame(playerHero, 'Бой окончен Вы одержали порожение');
         this.resetBattle(playerHero, enemyHero, playerCart, enemyCart);
         this.clearLogo();
+        this.deleteCurrentBattle();
 
       }
     }
