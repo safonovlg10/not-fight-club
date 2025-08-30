@@ -149,8 +149,6 @@ export default class Battle {
         obj[type] += 1;
       }
       
-      console.log(user.statistics, hero)
-      
       localStorage.setItem('User', JSON.stringify(user));
       
     }
@@ -282,7 +280,6 @@ export default class Battle {
 
   battleMode(playerHero, enemyHero, playerCart, enemyCart) {
     if (playerHero.health > 0 && enemyHero.health > 0) {
-      console.log(enemyHero)
         enemyHero.choiceRandomSkills("protection");
 
       if (this.playerAttack(playerHero, enemyHero, enemyCart)) {

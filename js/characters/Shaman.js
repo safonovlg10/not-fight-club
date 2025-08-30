@@ -1,6 +1,6 @@
 import EnemyСharacter from "./enemyСharacter.js";
 
-export default class Troll extends EnemyСharacter {
+export default class Shaman extends EnemyСharacter {
   constructor({
     name,
     avater,
