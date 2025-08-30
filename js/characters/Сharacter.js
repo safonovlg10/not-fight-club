@@ -64,39 +64,40 @@ export default class Character {
       ],
     };
   }
-  restoreSkills() {
+  restoreSkills(obj) {
+    console.log(obj)
         this.skills = {
       attack: [
         {
           name: "head",
           damage: (isCrit, protection) =>
             this.calculateDamage(125, protection, isCrit),
-          active: false,
+          active: obj.attack[0].active,
         },
         {
           name: "neck",
           damage: (isCrit, protection) =>
             this.calculateDamage(120, protection, isCrit),
-          active: false,
+          active: obj.attack[1].active,
         },
         {
           name: "body",
           damage: (isCrit, protection) =>
             this.calculateDamage(115, protection, isCrit),
-          active: false,
+          active: obj.attack[2].active,
         },
         {
           name: "legs",
           damage: (isCrit, protection) =>
             this.calculateDamage(110, protection, isCrit),
-          active: false,
+          active: obj.attack[3].active,
         },
       ],
       protection: [
-        { name: "head", active: false },
-        { name: "neck", active: false },
-        { name: "body", active: false },
-        { name: "legs", active: false },
+        { name: "head", active: obj.protection[0].active },
+        { name: "neck", active: obj.protection[1].active },
+        { name: "body", active: obj.protection[2].active },
+        { name: "legs", active: obj.protection[3].active },
       ],
     };
   }
@@ -212,22 +213,5 @@ export default class Character {
     this.countActiveProtection = 0;
     this.health = this.healthStatic;
     this.kill = false;
-  }
-
-    choiceRandomSkills(type = 'attack') {
-    const map = new Map();
-    let count = 0;
-    const countSkills = type === 'attack' ? this.countAttack : this.countProtection;
-    const arrSkills = this.skills[type]; 
-    while(count < countSkills){
-      let el = arrSkills[Math.floor(Math.random() * arrSkills.length)]
-      if(!map.has(el)) {
-        el.active = true;
-        map.set(el, el);
-        count++;
-      }
-    }
-    
-    return Array.from(map.values());
   }
 }
