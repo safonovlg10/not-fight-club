@@ -1,11 +1,14 @@
 export default function zoneSelector(type = "attack", listSkils, playerHero) {
   const div = document.createElement("div");
   div.classList.add(`${type}-zones`);
-  div.innerHTML = `<p>${type === "attack" ? "Attack" : "Protection"} Zones</p>`;
+  div.innerHTML = `<p>${type === "attack" ? "Attack" : "Protection"} Zones: ${type === "attack" ? playerHero.countAttack : playerHero.countProtection}</p>`;
 
   listSkils[type].forEach((el) => {
     const checkBoxContainer = document.createElement("div");
     checkBoxContainer.classList.add("check-box__container");
+    if(el.active) {
+      checkBoxContainer.classList.add("check-box--active");
+    }
     checkBoxContainer.id = `${type === "attack" ? "attack" : "protection"}-${
       el.name
     }`;
@@ -46,16 +49,9 @@ export default function zoneSelector(type = "attack", listSkils, playerHero) {
         btnAttack.disabled = true;
       }
 
-      //   if(isAddSkills) {  this.countActiveAttack = 0;
-    // this.countActiveProtection = 0;
-      // toggleActiveClass(el);
-      // setActiveSkillInObj(listSkils, id);
-      //     return;
-      //   }
-      //   removeActiveSkillInObj(listSkils, id);
     });
   });
-
+  
   return div;
 }
 
