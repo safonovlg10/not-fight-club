@@ -205,6 +205,8 @@ export default class Battle {
           enemyHero.getActiveProtectionSkills()
         )} → <span class="logo-crit-damage">${damage} урона</span>`
       );
+      const logoConteiner = document.querySelector('.battle-log__container');
+      logoConteiner.scrollTop = logoConteiner.scrollHeight;
     } else {
       logo = this.addLog(
         `<span class="logo-name-player">${
@@ -215,6 +217,8 @@ export default class Battle {
           enemyHero.getActiveProtectionSkills()
         )} → ${damage} урона`
       );
+      const logoConteiner = document.querySelector('.battle-log__container');
+      logoConteiner.scrollTop = logoConteiner.scrollHeight;
     }
     this.saveCurrentBattle(playerHero, enemyHero, logo)
     return enemyHero.kill;
@@ -239,6 +243,8 @@ export default class Battle {
           playerHero.getActiveProtectionSkills()
         )} → <span class="logo-crit-damage">${damage} урона</span>`
       );
+      const logoConteiner = document.querySelector('.battle-log__container');
+      logoConteiner.scrollTop = logoConteiner.scrollHeight;
     } else {
       logo = this.addLog(
         `<span class="logo-name-enemy">${
@@ -249,6 +255,8 @@ export default class Battle {
           playerHero.getActiveProtectionSkills()
         )} → ${damage} урона`
       );
+      const logoConteiner = document.querySelector('.battle-log__container');
+      logoConteiner.scrollTop = logoConteiner.scrollHeight;
     }
     this.saveCurrentBattle(playerHero, enemyHero, logo);
     return playerHero.kill;
