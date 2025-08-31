@@ -235,7 +235,7 @@ export default class Battle {
           enemyHero.name
         }</span>: <span class="logo-crit-damage"> Нанес Критический удар </span>${this.parseSkillsLog(
           attack
-        )}, враг защищался: ${this.parseSkillsLog(
+        )}, вы поставили защиту: ${this.parseSkillsLog(
           playerHero.getActiveProtectionSkills()
         )} → <span class="logo-crit-damage">${damage} урона</span>`
       );
@@ -245,7 +245,7 @@ export default class Battle {
           enemyHero.name
         }</span>: Нанес удар ${this.parseSkillsLog(
           attack
-        )}, враг защищался: ${this.parseSkillsLog(
+        )}, вы поставили защиту: ${this.parseSkillsLog(
           playerHero.getActiveProtectionSkills()
         )} → ${damage} урона`
       );

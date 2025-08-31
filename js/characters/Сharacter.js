@@ -130,7 +130,7 @@ export default class Character {
       } else {
         skillsProtection.forEach((protection) => {
           if (attack.name === protection.name) {
-            if (protection.active) {
+            if (!protection.active) {
               const damage = attack.damage(isCrit, protectionHero);
               this.health -= damage;
               sumDamage += damage;
