@@ -65,7 +65,6 @@ export default class Character {
     };
   }
   restoreSkills(obj) {
-    console.log(obj)
         this.skills = {
       attack: [
         {

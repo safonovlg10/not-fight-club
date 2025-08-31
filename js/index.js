@@ -5,10 +5,11 @@ import Battle from "./views/battle/Battle.js";
 import Router from "./router/Router.js";
 import Users from "./views/users/users.js";
 
+const user = JSON.parse(localStorage.getItem("User"));
 
-// import charactersData from "./characters/charactersData.js";
-
-// localStorage.removeItem("User");
+if (!user || !"storage" in user || user.storage !== "v1") {
+  localStorage.removeItem("User");
+}
 
 const routes = {
   "/": () => new Home(),

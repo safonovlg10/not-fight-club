@@ -22,7 +22,6 @@ export default class Setting {
       inputName.value = '';
       
       
-      console.log(localStorage)
     });
     
 
