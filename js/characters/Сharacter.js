@@ -116,13 +116,22 @@ export default class Character {
     return finalDamage;
   }
 
+
+
+
+
+
+
+
+
+
   takeDamage(attack, isCrit, protectionHero, skillsProtection) {
     let sumDamage = 0;
-    attack.forEach((attack) => {
+    
       if (isCrit) {
         const damage = attack.damage(isCrit, protectionHero);
         this.health -= damage;
-        sumDamage += damage;
+        sumDamage = damage;
         if (this.health <= 0) {
           this.health = 0;
           this.kill = true;
@@ -133,7 +142,7 @@ export default class Character {
             if (!protection.active) {
               const damage = attack.damage(isCrit, protectionHero);
               this.health -= damage;
-              sumDamage += damage;
+              sumDamage = damage;
               if (this.health <= 0) {
                 this.health = 0;
                 this.kill = true;
@@ -142,7 +151,7 @@ export default class Character {
           }
         });
       }
-    });
+    
     return sumDamage;
   }
   attack() {
