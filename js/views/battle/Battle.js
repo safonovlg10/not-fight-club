@@ -190,18 +190,23 @@ export default class Battle {
    }
 
   playerAttack(playerHero, enemyHero, enemyCart) {
-    enemyHero.isCrit = Math.random() < enemyHero.critChance;
+    this.addLog(`<div class="logo--line"></div>`);
     let logo = null;
+
     const attack = playerHero.attack();
+    attack.forEach((attack) => {
+
+    enemyHero.isCrit = Math.random() < enemyHero.critChance;
+    
     const damage = enemyHero.takeDamage(attack, enemyHero.isCrit, enemyHero.protection, enemyHero.skills.protection);
     this.updateHealth(enemyCart, enemyHero.health, enemyHero.healthStatic);
     if (enemyHero.isCrit) {
       logo = this.addLog(
         `<span class="logo-name-player">${
           playerHero.name
-        }</span>: <span class="logo-crit-damage"> Нанес Критический удар </span>${this.parseSkillsLog(
-          attack
-        )}, враг защищался: ${this.parseSkillsLog(
+        }</span>: <span class="logo-crit-damage"> Нанес Критический удар </span>${
+          attack.name
+        }, враг защищался: ${this.parseSkillsLog(
           enemyHero.getActiveProtectionSkills()
         )} → <span class="logo-crit-damage">${damage} урона</span>`
       );
@@ -211,9 +216,9 @@ export default class Battle {
       logo = this.addLog(
         `<span class="logo-name-player">${
           playerHero.name
-        }</span>: Нанес удар ${this.parseSkillsLog(
-          attack
-        )}, враг защищался: ${this.parseSkillsLog(
+        }</span>: Нанес удар ${
+          attack.name
+        }, враг защищался: ${this.parseSkillsLog(
           enemyHero.getActiveProtectionSkills()
         )} → ${damage} урона`
       );
@@ -221,25 +226,31 @@ export default class Battle {
       logoConteiner.scrollTop = logoConteiner.scrollHeight;
     }
     this.saveCurrentBattle(playerHero, enemyHero, logo)
+    
+    });
     return enemyHero.kill;
   }
 
   parseSkillsLog(skills) {
+    console.log(skills)
     return skills.map((el) => el.name).join(", ");
   }
   enemyAttack(playerHero, enemyHero, playerCart) {
-    playerHero.isCrit = Math.random() < playerHero.critChance;
+    this.addLog(`<div class="logo--line"></div>`);
     let logo = null;
     const attack = enemyHero.attack();
+    attack.forEach((attack) => {
+
+    playerHero.isCrit = Math.random() < playerHero.critChance;
     const damage = playerHero.takeDamage(attack, playerHero.isCrit, playerHero.protection, playerHero.skills.protection);
     this.updateHealth(playerCart, playerHero.health, playerHero.healthStatic);
     if (playerHero.isCrit) {
       logo = this.addLog(
         `<span class="logo-name-enemy">${
           enemyHero.name
-        }</span>: <span class="logo-crit-damage"> Нанес Критический удар </span>${this.parseSkillsLog(
-          attack
-        )}, вы поставили защиту: ${this.parseSkillsLog(
+        }</span>: <span class="logo-crit-damage"> Нанес Критический удар </span>${
+          attack.name
+        }, вы поставили защиту: ${this.parseSkillsLog(
           playerHero.getActiveProtectionSkills()
         )} → <span class="logo-crit-damage">${damage} урона</span>`
       );
@@ -249,9 +260,9 @@ export default class Battle {
       logo = this.addLog(
         `<span class="logo-name-enemy">${
           enemyHero.name
-        }</span>: Нанес удар ${this.parseSkillsLog(
-          attack
-        )}, вы поставили защиту: ${this.parseSkillsLog(
+        }</span>: Нанес удар ${
+          attack.name
+        }, вы поставили защиту: ${this.parseSkillsLog(
           playerHero.getActiveProtectionSkills()
         )} → ${damage} урона`
       );
@@ -259,6 +270,8 @@ export default class Battle {
       logoConteiner.scrollTop = logoConteiner.scrollHeight;
     }
     this.saveCurrentBattle(playerHero, enemyHero, logo);
+    
+    })
     return playerHero.kill;
   }
 
@@ -287,6 +300,7 @@ export default class Battle {
   }
 
   battleMode(playerHero, enemyHero, playerCart, enemyCart) {
+      // this.resetBattle(playerHero, enemyHero, playerCart, enemyCart)
     if (playerHero.health > 0 && enemyHero.health > 0) {
         enemyHero.choiceRandomSkills("protection");
 

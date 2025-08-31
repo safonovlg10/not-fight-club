@@ -335,6 +335,13 @@ code {
   padding-left: 0;
 }
 
+.logo--line {
+  width: 100%;
+  height: 2px;
+  background-color: #771616;
+  margin: 7px 0;
+}
+
 .log-list li {
   margin-bottom: 5px;
 }
