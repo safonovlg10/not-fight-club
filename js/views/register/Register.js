@@ -19,6 +19,7 @@ export default class Register {
       enemyHero: 'Troll',
       statistics: [],
       battle: null,
+      storage: 'v1',
 
     };
 
