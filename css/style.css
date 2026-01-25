@@ -182,7 +182,6 @@ code {
   margin-bottom: 0;
 }
 
-
 /* home */
 
 .home__container {
@@ -191,9 +190,9 @@ code {
   gap: 20px 40px;
 }
 .cart-character__container {
-    width: 30%;
-    /* height: 300px; */
-    padding: 25px;
+  width: 30%;
+  height: max-content;
+  padding: 25px;
 }
 .cart-character-home__container {
   width: 250px;
@@ -202,7 +201,7 @@ code {
 }
 .cart-character__img {
   width: 100%;
-  height: 230px;
+  height: 212px;
   margin-bottom: 20px;
 }
 .info-character__container {
@@ -212,19 +211,17 @@ code {
   padding: 15px;
   margin-bottom: 42px;
 }
-.info-character__container p{
+.info-character__container p {
   color: var(--muted);
   margin: 10px;
 }
 .home__content-conateiner {
   display: flex;
   flex-direction: column;
-
 }
 .name {
   align-self: center;
 }
-
 
 /* battle */
 .character-name {
@@ -233,7 +230,8 @@ code {
 }
 .battle-controls {
   display: flex;
-  gap: 25px;
+  justify-content: center;
+  gap: 13px;
 }
 .skills__container {
   display: flex;
@@ -241,7 +239,9 @@ code {
   gap: 25px;
   width: 30%;
 }
-
+.attack-zones, .protection-zones {
+  flex-grow: 1;
+}
 .separator {
   width: 1px;
   height: auto;
@@ -258,7 +258,6 @@ code {
 }
 .check-box__container:hover {
   opacity: 0.7;
-  
 }
 .check-box--active {
   background-color: #121d2d;
@@ -283,17 +282,16 @@ code {
   border-radius: 10px;
 }
 .health-bar--label {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    padding: 0;
-    margin: 0;
-    transform: translate(-50%, -50%);
-
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  padding: 0;
+  margin: 0;
+  transform: translate(-50%, -50%);
 }
 
 .btnAttack {
-  background: #771616 ;
+  background: #771616;
 }
 
 .btn--disabled {
@@ -301,12 +299,25 @@ code {
   pointer-events: none;
 }
 
+.protection-zones p, .attack-zones p {
+  font-size: 14px;
+}
+.modal-end-game .info-character__container {
+  margin-bottom: 10px;
+  padding: 40px;
+  align-self: center;
+}
+.message {
+  text-align: center;
+  margin: 23px;
+  padding: 14px;
+}
 
 /* logo */
 
 .battle-log__container {
   width: 100%;
-  height: 150px;
+  height: 120px;
   margin-top: 20px;
   padding: 10px;
   color: #fff;
@@ -324,6 +335,91 @@ code {
   padding-left: 0;
 }
 
+.logo--line {
+  width: 100%;
+  height: 2px;
+  background-color: #771616;
+  margin: 7px 0;
+}
+
 .log-list li {
   margin-bottom: 5px;
+}
+.logo-name-player {
+  color: #eab308;
+}
+.logo-name-enemy {
+  color: #22d3ee;
+}
+.logo-crit-damage {
+  color: #c21313;
+}
+
+/* users */
+
+.cart-character {
+  width: 190px;
+  padding: 15px;
+  cursor: pointer;
+  transition: all 0.5s ease-in-out;
+}
+.cart-character:hover {
+  border: solid 1px #687a94;
+  transform: scale(1.05);
+}
+
+.card-active {
+  border: dashed 1px #22d3ee ;
+  transform: none;
+}
+.cart-character.card-active:hover {
+  border: dashed 1px #22d3ee ;
+  transform: none;
+}
+
+/* modal */
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    display: flex;
+    position: relative;
+    width: 585px;
+    gap: 20px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 35px;
+    border-radius: 8px;
+    background-color: var(--bg);
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.statistics__container {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+.statistics--win {
+  color: green;
+}
+.statistics--los {
+  color: red;
 }
